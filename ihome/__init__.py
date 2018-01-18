@@ -9,6 +9,7 @@ from flask_wtf import CSRFProtect
 # import api_1_0
 from config import config_dict
 from flask import Flask
+from utils.common import RegexConverter
 
 # 为了方便其他模块调用db，将其放在create外面，延迟初始化
 db = SQLAlchemy()
@@ -44,10 +45,16 @@ def create_app(config_name):
     # 将flask里的session数据保存到redis中
     Session(app)
 
+    # 在app中添加自定义的路由转换器
+    app.url_map.converters["re"] = RegexConverter
+
     global redis_store
     redis_store = redis.StrictRedis(host=conf.REDIS_HOST, port=conf.REDIS_PORT)
 
     # 注册蓝图
     import api_1_0
     app.register_blueprint(api_1_0.api, url_prefix="/api/v1_0")
+    # 提供静态文件的蓝图
+    import web_html
+    app.register_blueprint(web_html.html)
     return app
