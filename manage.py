@@ -9,7 +9,6 @@ from flask_migrate import MigrateCommand, Migrate
 from ihome import create_app, db
 
 app = create_app("develop")
-
 # db = SQLAlchemy(app)
 
 # 创建管理工具对象
@@ -22,11 +21,9 @@ manager.add_command("db", MigrateCommand)
 # csrf = CSRFProtect(app)
 # 将flask里的session数据保存到redis中
 # Session(app)
-
-
-@app.route("/")
-def index():
-    return "index page"
+# @app.route("/")
+# def index():
+#     return "index page"
 
 
 if __name__ == '__main__':

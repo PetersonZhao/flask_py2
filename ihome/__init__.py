@@ -3,7 +3,7 @@ import redis
 from flask_session import Session
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import CSRFProtect
-
+# import api_1_0
 from config import config_dict
 from flask import Flask
 
@@ -33,4 +33,7 @@ def create_app(config_name):
     global redis_store
     redis_store = redis.StrictRedis(host=conf.REDIS_HOST, port=conf.REDIS_PORT)
 
+    # 注册蓝图
+    import api_1_0
+    app.register_blueprint(api_1_0.api, url_prefix="/api/v1_0")
     return app
