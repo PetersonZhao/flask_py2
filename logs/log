@@ -102,3 +102,17 @@ INFO _internal.py:87 127.0.0.1 - - [18/Jan/2018 15:54:32] "GET /static/images/ho
 INFO _internal.py:87 127.0.0.1 - - [18/Jan/2018 15:54:32] "GET /static/images/home02.jpg HTTP/1.1" 200 -
 INFO _internal.py:87 127.0.0.1 - - [18/Jan/2018 15:54:32] "GET /static/images/home03.jpg HTTP/1.1" 200 -
 INFO _internal.py:87 127.0.0.1 - - [18/Jan/2018 15:54:31] "GET /favicon.ico HTTP/1.1" 200 -
+INFO _internal.py:87  * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+INFO _internal.py:87  * Restarting with stat
+WARNING _internal.py:87  * Debugger is active!
+INFO _internal.py:87  * Debugger PIN: 109-808-330
+INFO _internal.py:87 127.0.0.1 - - [18/Jan/2018 16:01:44] "GET /redister.html HTTP/1.1" 404 -
+INFO _internal.py:87 127.0.0.1 - - [18/Jan/2018 16:01:44] "GET /favicon.ico HTTP/1.1" 200 -
+INFO _internal.py:87 127.0.0.1 - - [18/Jan/2018 16:01:51] "GET /register.html HTTP/1.1" 200 -
+INFO _internal.py:87 127.0.0.1 - - [18/Jan/2018 16:01:51] "GET /static/css/ihome/register.css HTTP/1.1" 200 -
+INFO _internal.py:87 127.0.0.1 - - [18/Jan/2018 16:01:51] "GET /static/js/ihome/register.js?v=3 HTTP/1.1" 200 -
+INFO _internal.py:87 127.0.0.1 - - [18/Jan/2018 16:01:51] "GET /api/v1_0/image_codes/8bd1386a-9af3-4977-a77c-d74cb6963f4d HTTP/1.1" 404 -
+INFO _internal.py:87 127.0.0.1 - - [18/Jan/2018 16:02:02] "GET /api/v1_0/image_codes/a40fda21-1211-4ca3-ba77-68182dcfdd96 HTTP/1.1" 404 -
+INFO _internal.py:87 127.0.0.1 - - [18/Jan/2018 16:02:03] "GET /api/v1_0/image_codes/cd2b1c6b-e8d8-46d5-b07e-e8e647949d71 HTTP/1.1" 404 -
+INFO _internal.py:87 127.0.0.1 - - [18/Jan/2018 16:02:03] "GET /api/v1_0/image_codes/f491e0cd-10ae-46b3-8dd7-8da93ea8a582 HTTP/1.1" 404 -
+INFO _internal.py:87 127.0.0.1 - - [18/Jan/2018 16:02:03] "GET /api/v1_0/image_codes/3ac795ba-3d54-498b-9815-52e3a7f82e72 HTTP/1.1" 404 -
