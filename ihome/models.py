@@ -2,7 +2,7 @@
 
 from datetime import datetime
 # from ihome import constants
-from werkzeug.security import generate_password_hash
+from werkzeug.security import generate_password_hash, check_password_hash
 
 from . import db
 
@@ -36,12 +36,25 @@ class User(BaseModel, db.Model):
 
     @password.setter
     def password(self, value):
-        """对应password属性的设置操作,value用户设置的密码值"""
+        """
+        对应password属性的设置操作
+        :param value: 用户设置的密码值
+        :return: None
+        """
         self.password_hash = generate_password_hash(value)
 
     # def generate_password(self, password):
     #     """生成用户密码的加密结果"""
     #     self.password_hash = generate_password_hash(password)
+
+    def check_password(self, value):
+        """
+        检查用户的密码
+        :param value: 用户填写的密码
+        :return: 密码正确则返回True, 否则返回false
+        """
+        return check_password_hash(self.password_hash, value)
+        # pass
 
 
 class Area(BaseModel, db.Model):

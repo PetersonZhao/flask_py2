@@ -122,3 +122,72 @@ def register():
         "errmsg": "注册成功"
     }
     return jsonify(resp)
+
+
+@api.route("/session", methods=["POST"])
+def login():
+    """用户登陆"""
+    # 获取json数据
+    req_dict = request.get_json()
+    user_mobile = req_dict.get("mobile")
+    password = req_dict.get("password")
+
+    if not all([user_mobile, password]):
+        resp = {
+            "errno": RET.PARAMERR,
+            "errmsg": "参数不完整"
+        }
+        return jsonify(resp)
+
+    # 判断用户是否存在
+    try:
+        user = User.query.filter_by(mobile=user_mobile).first()
+    except Exception as e:
+        current_app.logger.error(e)
+        resp = {
+            "errno": RET.DBERR,
+            "errmsg": "查询数据库错误"
+        }
+        return jsonify(resp)
+
+    if user is None:
+        # 用户不存在
+        resp = {
+            "errno": RET.USERERR,
+            "errmsg": "用户不存在"
+        }
+        return jsonify(resp)
+    # 校验密码
+    try:
+        result = user.check_password(password)
+    except Exception as e:
+        current_app.logger.error(e)
+        resp = {
+            "errno": RET.DBERR,
+            "errmsg": "查询数据库错误"
+        }
+        return jsonify(resp)
+
+    if result is True:
+        # 密码正确
+        # 利用session记录用户的登陆状态
+        session["user_id"] = user.id
+        session["user_name"] = user_mobile
+        session["user_id"] = user_mobile
+        resp = {
+            "errno": RET.OK,
+            "errmsg": "登陆成功"
+        }
+        return jsonify(resp)
+        # pass
+    else:
+        # 密码错误
+        resp = {
+            "errno": RET.PWDERR,
+            "errmsg": "密码错误"
+        }
+        return jsonify(resp)
+        # pass
+    # user = User()
+    # user.check_password()
+    # pass
