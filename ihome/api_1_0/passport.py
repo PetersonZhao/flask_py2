@@ -124,7 +124,7 @@ def register():
     return jsonify(resp)
 
 
-@api.route("/session", methods=["POST"])
+@api.route("/passport", methods=["POST"])
 def login():
     """用户登陆"""
     # 获取json数据
@@ -191,3 +191,31 @@ def login():
     # user = User()
     # user.check_password()
     # pass
+
+
+@api.route("/session", methods=["POST"])
+def check_login():
+    """检查用户的登陆状态"""
+    # 从seesion中取user_id
+    # req_dict = request.get_json()
+    # user_session = req_dict.get("session")
+    try:
+        user_name = session.get("user_name")
+    except Exception as e:
+        current_app.logger.error(e)
+    else:
+        if user_name is not None:
+            # 用户已登陆
+            resp = {
+                "user_name": user_name,
+                "errno": RET.OK,
+                "errmsg": "用户已登陆"
+            }
+            return jsonify(resp)
+        else:
+            # 用户未登录
+            resp = {
+                "errno": RET.SESSIONERR,
+                "errmsg": "用户未登陆"
+            }
+            return jsonify(resp)

@@ -35,7 +35,7 @@ $(document).ready(function() {
 
         // 使用ajax发送请求
         $.ajax({
-            url: "/api/v1_0/session",  // 请求路径
+            url: "/api/v1_0/passport",  // 请求路径
             type: "post",
             data: req_json,
             contentType: "application/json",
