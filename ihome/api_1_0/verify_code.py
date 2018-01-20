@@ -4,6 +4,7 @@ import random
 from flask import current_app, jsonify, make_response, request
 
 from ihome.libs.yuntongxun.sms import CCP
+from ihome.models import User
 from ihome.utils.response_code import RET
 from . import api
 from ihome.utils.captcha.captcha import captcha
@@ -90,6 +91,26 @@ def send_sms_code(mobile):
             "errmsg": "图片验证码有误"
         }
         return jsonify(resp)
+
+    # 判断用户手机号是否注册过
+    try:
+        user = User.query.filter_by(mobile=mobile).first()
+    except Exception as e:
+        current_app.logger.error(e)
+        # resp = {
+        #     "errno": RET.DBERR,
+        #     "errmsg": ""
+        # }
+        # return jsonify(resp)
+    else:
+        if user is not None:
+            # 用户已经注册过
+            resp = {
+                "errno": RET.DATAEXIST,
+                "errmsg": "用户手机号已经注册过"
+            }
+            return jsonify(resp)
+
     # 创建短信验证码
     sms_code = "%06d" % random.randint(0, 999999)
 
