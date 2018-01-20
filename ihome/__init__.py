@@ -40,7 +40,7 @@ def create_app(config_name):
 
     # 延迟初始化数据库
     db.init_app(app)
-    csrf.init_app(app)
+    # csrf.init_app(app)
 
     # 将flask里的session数据保存到redis中
     Session(app)
