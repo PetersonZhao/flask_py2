@@ -51,7 +51,7 @@ function sendSMSCode() {
         image_code_id: imageCodeId,
         image_code: imageCode
     };
-    $.get("/api/v1_0/sms_codes/" + mobile, req_data, function (reap) {
+    $.get("/api/v1_0/sms_codes/" + mobile, req_data, function (resp) {
         // 根据返回的数据，进行相应的处理
         if (resp.error == 4004 || resp.error==4002) {
             // 图片验证码错误
@@ -122,7 +122,9 @@ $(document).ready(function() {
     $("#password2").focus(function(){
         $("#password2-err").hide();
     });
+    // 给表单添加自定义的提交行为
     $(".form-register").submit(function(e){
+        // 阻止表单的默认行为
         e.preventDefault();
         mobile = $("#mobile").val();
         phoneCode = $("#phonecode").val();
@@ -148,5 +150,38 @@ $(document).ready(function() {
             $("#password2-err").show();
             return;
         }
+
+        // 向后端发送请求,提交用户的注册信息
+        var req_data = {
+            mobile: mobile,
+            sms_code: phoneCode,
+            password: passwd
+        };
+        // 将js对象转换为json字符串
+        req_json = JSON.stringify(req_data);
+
+        // $.post("/api/v1_0/user", req_json, function (resp) {
+        //     if (resp.errno == 0){
+        //         // 注册成功, 引导到主页页面
+        //         location.herf = "/"
+        //     } else {
+        //         alert(resp.errmsg);
+        //     }
+        // })
+        $.ajax({
+            url: "/api/v1_0/user", // 请求路径
+            type: "post",  // 请求方式
+            data: req_json,  //发送的请求体数据
+            contentType: "application/json",  // 指明向后端发送的是json格式的数据
+            dataType: "json", // 指明从后端接收过来的是json数据
+            success: function (resp) {
+            if (resp.errno == 0){
+                // 注册成功, 引导到主页页面
+                location.href = "/";
+            } else {
+                alert(resp.errmsg);
+            }
+        }
+        })
     });
-})
+});
