@@ -4,6 +4,7 @@ from flask import request, jsonify, current_app, session
 
 from ihome import redis_store, db
 from ihome.models import User
+from ihome.utils.common import login_required
 from ihome.utils.response_code import RET
 from . import api
 
@@ -219,3 +220,28 @@ def check_login():
                 "errmsg": "用户未登陆"
             }
             return jsonify(resp)
+
+
+@api.route("/session", methods=["DELETE"])
+@login_required
+def logout():
+    """用户登出"""
+    # 清除session数据
+    try:
+        session.clear()
+    except Exception as e:
+        current_app.logger.error(e)
+        resp = {
+            "errno": RET.SERVERERR,
+            "errmsg": "用户登出失败"
+        }
+        return jsonify(resp)
+    else:
+        resp = {
+            "errno": RET.OK,
+            "errmsg": "用户已登出"
+        }
+        return jsonify(resp)
+
+    # session.clear()
+    # 返回给前端操作是否成功

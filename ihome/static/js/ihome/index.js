@@ -118,7 +118,7 @@ $(document).ready(function () {
                 $(".top-bar>.user-info").show();
 
             } else {
-                alert(resp.errmsg);
+                // alert(resp.errmsg);
             }
         }
     })

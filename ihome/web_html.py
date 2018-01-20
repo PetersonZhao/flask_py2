@@ -2,9 +2,12 @@
 
 from flask import Blueprint, current_app, make_response
 from flask_wtf.csrf import generate_csrf
+
 # from . import RegexConverter
 
 html = Blueprint("html", __name__)
+
+
 # 提供静态的html文件
 
 @html.route("/<re(r'.*'):file_name>")
