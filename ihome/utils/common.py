@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from functools import wraps
+
 from flask import session, g, jsonify
 from werkzeug.routing import BaseConverter
 
@@ -15,6 +17,7 @@ class RegexConverter(BaseConverter):
 
 def login_required(func):
     """检查用户是否登陆"""
+    @wraps(func)
     def wrapper(*args, **kwargs):
         user_id = session.get("user_id")
         if user_id is not None:
