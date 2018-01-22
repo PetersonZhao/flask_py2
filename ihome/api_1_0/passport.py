@@ -2,7 +2,7 @@
 import re
 from flask import request, jsonify, current_app, session
 
-from ihome import redis_store, db
+from ihome import redis_store, db, constants
 from ihome.models import User
 from ihome.utils.common import login_required
 from ihome.utils.response_code import RET
@@ -140,7 +140,25 @@ def login():
         }
         return jsonify(resp)
 
-    # 判断用户是否存在
+    # 判断手机号格式
+    if not re.match(r"1[345678]\d{9}", user_mobile):
+        return jsonify(errno=RET.PARAMERR, errmsg="手机号格式不正确")
+
+    # 判断用户的错误次数
+    # 从redis中获取错误次数
+    # 获取登陆用户的ip
+    user_ip = request.remote_addr
+    try:
+        # 获取用户ip的登陆次数
+        access_counts = redis_store.get("access_%s" % user_ip)
+    except Exception as e:
+        current_app.logger.error(e)
+    else:
+        # 如果有错误次数记录, 并且超过最大次数, 直接返回
+        if access_counts is not None and access_counts >= constants.LOGIN_ERROR_MAX_NUM:
+            return jsonify(errno=RET.REQERR, errmsg="用户登陆过于频繁")
+
+    # 查询数据库,判断用户名与密码
     try:
         user = User.query.filter_by(mobile=user_mobile).first()
     except Exception as e:
@@ -151,44 +169,61 @@ def login():
         }
         return jsonify(resp)
 
-    if user is None:
-        # 用户不存在
+    if user is None or not user.check_password(password):
+        # 用户不存在或密码错误
+        # 出现错误,累加错误次数
+        # access_counts += 1
+        try:
+            # 将key中储存的数字值+1,如果不存在,则初始化为0
+            redis_store.incr("access_%s" % user_ip)
+            # 设置有效期
+            redis_store.expire("access_%s" % user_ip, constants.LOGIN_ERROR_FORBID_TIME)
+
+        except Exception as e:
+            current_app.logger.error(e)
         resp = {
-            "errno": RET.USERERR,
-            "errmsg": "用户不存在"
+            "errno": RET.LOGINERR,
+            "errmsg": "用户名或密码错误"
         }
         return jsonify(resp)
     # 校验密码
+    # try:
+    #     result = user.check_password(password)
+    # except Exception as e:
+    #     current_app.logger.error(e)
+    #     resp = {
+    #         "errno": RET.DBERR,
+    #         "errmsg": "查询数据库错误"
+    #     }
+    #     return jsonify(resp)
+    #
+    # if result is True:
+    # 密码正确
+
+    # 登陆成功,删除用户的错误计数
     try:
-        result = user.check_password(password)
+        redis_store.delete("access_%s" % user_ip)
     except Exception as e:
         current_app.logger.error(e)
-        resp = {
-            "errno": RET.DBERR,
-            "errmsg": "查询数据库错误"
-        }
-        return jsonify(resp)
 
-    if result is True:
-        # 密码正确
-        # 利用session记录用户的登陆状态
-        session["user_id"] = user.id
-        session["user_name"] = user_mobile
-        session["user_id"] = user_mobile
-        resp = {
-            "errno": RET.OK,
-            "errmsg": "登陆成功"
-        }
-        return jsonify(resp)
-        # pass
-    else:
-        # 密码错误
-        resp = {
-            "errno": RET.PWDERR,
-            "errmsg": "密码错误"
-        }
-        return jsonify(resp)
-        # pass
+    # 利用session记录用户的登陆状态
+    session["user_id"] = user.id
+    session["user_name"] = user_mobile
+    session["user_id"] = user_mobile
+    resp = {
+        "errno": RET.OK,
+        "errmsg": "登陆成功"
+    }
+    return jsonify(resp)
+    # pass
+    # else:
+    #     # 密码错误
+    #     resp = {
+    #         "errno": RET.PWDERR,
+    #         "errmsg": "密码错误"
+    #     }
+    #     return jsonify(resp)
+    #     # pass
     # user = User()
     # user.check_password()
     # pass

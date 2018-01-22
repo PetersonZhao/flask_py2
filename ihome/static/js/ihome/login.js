@@ -46,8 +46,13 @@ $(document).ready(function() {
             success: function (resp) {
                 if (resp.errno == 0) {
                     location.href = "/";
+                    // return;
                 } else {
-                    alert(resp.errmsg);
+                    // alert(resp.errmsg);
+                    // 其他错误信息,在页面中显示
+                    $("#password-err span").html(resp.errmsg);
+                    $("#password-err").show();
+                    // return;
                 }
             }
         })
