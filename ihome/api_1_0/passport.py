@@ -208,8 +208,8 @@ def login():
 
     # 利用session记录用户的登陆状态
     session["user_id"] = user.id
-    session["user_name"] = user_mobile
-    session["user_id"] = user_mobile
+    session["user_name"] = user.name
+    session["mobile"] = user_mobile
     resp = {
         "errno": RET.OK,
         "errmsg": "登陆成功"

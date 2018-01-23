@@ -31,14 +31,19 @@ def set_user_avatar():
         return jsonify(errno=RET.THIRDERR, errmsg="上传头像异常")
 
     # 将文件名保存到数据库中
+    # print(db,"____________")
     try:
+        # print()
         User.query.filter_by(id=user_id).update({"avatar_url": file_name})
+        db.session.commit()
     except Exception as e:
         current_app.logger.error(e)
+        db.session.rollback()
         return jsonify(errno=RET.DBERR, errmsg="保存头像信息失败")
 
     avatar_url = constants.QINIU_URL_DOMAIN + file_name
 
+    # print(avatar_url)
     # 返回值
     return jsonify(errno=RET.OK, errmsg="保存头像成功", data={"avatar_url": avatar_url})
 
@@ -79,6 +84,7 @@ def change_user_name():
 def get_user_profile():
     """获取个人信息"""
     user_id = g.user_id
+    # current_app.logger.info(user_id)
     # 查询数据库获取个人信息
     try:
         user = User.query.get(user_id)

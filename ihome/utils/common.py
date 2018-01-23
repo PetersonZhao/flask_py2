@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from functools import wraps
 
-from flask import session, g, jsonify
+from flask import session, g, jsonify, current_app
 from werkzeug.routing import BaseConverter
 
 from ihome.utils.response_code import RET
@@ -20,6 +20,7 @@ def login_required(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
         user_id = session.get("user_id")
+        # current_app.logger.info(user_id)
         if user_id is not None:
             # 表示用户已经登陆
             # 使用g对象保存userid
