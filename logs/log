@@ -1330,3 +1330,19 @@ INFO _internal.py:87 127.0.0.1 - - [22/Jan/2018 22:37:54] "GET /newhouse.html HT
 INFO _internal.py:87 127.0.0.1 - - [22/Jan/2018 22:37:54] "GET /static/js/template.js HTTP/1.1" 200 -
 INFO houses.py:42 hit redis cache area info
 INFO _internal.py:87 127.0.0.1 - - [22/Jan/2018 22:37:54] "GET /api/v1_0/areas HTTP/1.1" 200 -
+INFO _internal.py:87  * Detected change in '/home/python/PycharmProjects/flask_py2/ihome/api_1_0/profile.py', reloading
+INFO _internal.py:87  * Restarting with stat
+WARNING _internal.py:87  * Debugger is active!
+INFO _internal.py:87  * Debugger PIN: 109-808-330
+INFO _internal.py:87  * Detected change in '/home/python/PycharmProjects/flask_py2/ihome/api_1_0/profile.py', reloading
+INFO _internal.py:87  * Restarting with stat
+WARNING _internal.py:87  * Debugger is active!
+INFO _internal.py:87  * Debugger PIN: 109-808-330
+INFO _internal.py:87  * Detected change in '/home/python/PycharmProjects/flask_py2/ihome/api_1_0/profile.py', reloading
+INFO _internal.py:87  * Restarting with stat
+WARNING _internal.py:87  * Debugger is active!
+INFO _internal.py:87  * Debugger PIN: 109-808-330
+INFO _internal.py:87  * Detected change in '/home/python/PycharmProjects/flask_py2/ihome/models.py', reloading
+INFO _internal.py:87  * Restarting with stat
+WARNING _internal.py:87  * Debugger is active!
+INFO _internal.py:87  * Debugger PIN: 109-808-330
